@@ -10,12 +10,6 @@
       <van-tab :title="item.name" v-for="item in channelList" :key="item.id">
         <com-article></com-article>
       </van-tab>
-      <!-- <van-tab title="数据库">
-        <com-article></com-article>
-      </van-tab>
-      <van-tab title="后端">
-        <com-article></com-article>
-      </van-tab>-->
     </van-tabs>
   </div>
 </template>
@@ -46,7 +40,7 @@ export default {
     // 频道
     async getChannelList () {
       const result = await apiChannelList()
-      console.log(result)
+      // console.log(result)
       // data接收频道列表
       this.channelList = result.channels
     }
