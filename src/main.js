@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import Vant from 'vant'
+import Vant, { Lazyload } from 'vant'
 import 'vant/lib/index.css'
 
 import 'amfe-flexible/index.min.js'
@@ -12,7 +12,15 @@ import '@/assets/css/global.less' // 引入全局的自定义样式  因为要�
 
 import '@/utils/validate.js' // 验证相关
 
+import * as filters from '@/utils/filters' // 过滤器
+
 Vue.use(Vant)
+Vue.use(Lazyload) // 注册懒加载指令
+
+// 注册全局过滤器
+Object.keys(filters).forEach(item => {
+  Vue.filter(item, filters[item])
+})
 
 Vue.config.productionTip = false
 
