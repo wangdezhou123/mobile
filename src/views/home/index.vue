@@ -8,7 +8,7 @@
     <van-tabs v-model="activeChannelIndex">
       <!-- <van-tab title="标签名称">当前标签对应的内容</van-tab> -->
       <van-tab :title="item.name" v-for="item in channelList" :key="item.id">
-        <com-article></com-article>
+        <com-article :channelID="item.id"></com-article>
       </van-tab>
     </van-tabs>
   </div>
@@ -26,19 +26,19 @@ export default {
   components: {
     ComArticle
   },
-  data () {
+  data() {
     return {
       channelList: [],
       // 激活频道下标标志
       activeChannelIndex: 0
     }
   },
-  created () {
+  created() {
     this.getChannelList()
   },
   methods: {
     // 频道
-    async getChannelList () {
+    async getChannelList() {
       const result = await apiChannelList()
       // console.log(result)
       // data接收频道列表
