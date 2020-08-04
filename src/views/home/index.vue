@@ -26,21 +26,20 @@ export default {
   components: {
     ComArticle
   },
-  data() {
+  data () {
     return {
       channelList: [],
       // 激活频道下标标志
       activeChannelIndex: 0
     }
   },
-  created() {
+  created () {
     this.getChannelList()
   },
   methods: {
     // 频道
-    async getChannelList() {
+    async getChannelList () {
       const result = await apiChannelList()
-      // console.log(result)
       // data接收频道列表
       this.channelList = result.channels
     }

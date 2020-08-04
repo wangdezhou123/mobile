@@ -41,6 +41,12 @@ slot="label/title/"
               </van-grid-item>
             </van-grid>
             <p>
+              <van-icon
+                name="close"
+                style="float:right;"
+                @click="displayDialog(item.art_id.toString())"
+              />
+
               <span>作者:{{item.aut_name}}</span>
               &nbsp;
               <span>评论 :{{item.comm_count}}</span>
@@ -52,18 +58,33 @@ slot="label/title/"
         </van-cell>
       </van-list>
     </van-pull-refresh>
+
+    <!-- 更多操作组件位置(举报、不感兴趣弹出框) -->
+    <more-action
+      v-model="showDialog"
+      :articleID="nowArticleID"
+      @dislikeSuccess="handleDislikeSuccess"
+    ></more-action>
   </div>
 </template>
 
 <script>
+
+// 对com-moreaction.vue弹出框组件做 导入、注册、使用
+import MoreAction from './com-moreaction.vue'
 
 // 导入获得文章的api函数
 import { apiArticleList } from '@/api/article.js'
 
 export default {
   name: 'com-article',
+  components: {
+    MoreAction
+  },
   data () {
     return {
+      nowArticleID: '', // 不感兴趣文章id
+      showDialog: false, // 控制子组件弹出框是否显示
       // 文章列表
       articleList: [],
       ts: Date.now(), // 时间戳参数，用于分页获取文章信息
@@ -84,6 +105,29 @@ export default {
     }
   },
   methods: {
+    // 文章不感兴趣后续处理
+    handleDislikeSuccess () {
+      // 从 articleList 文章列表中把目标的文章给删除
+      // [客户端级]删除
+      // 目标文章id：nowArticleID
+
+      // 1. 根据 nowArticleID 把其在 articleList 数组中的下标给获得到，
+      // findIndex：获得指定数组元素下标
+      const index = this.articleList.findIndex(
+        item => item.art_id.toString() === this.nowArticleID
+      )
+      // 2. 根据下标 从 articleList 中做删除操作
+      //    数组.splice(下标,长度) 删除数组的指定元素
+      this.articleList.splice(index, 1)
+    },
+    /**
+     * 显示更多操作对话框
+     * artID: 不喜欢文章id
+     */
+    displayDialog (artID) {
+      this.showDialog = true
+      this.nowArticleID = artID
+    },
     // 获得文章列表
     async getArticleList () {
       const result = await apiArticleList({
