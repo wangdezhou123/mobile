@@ -6,15 +6,32 @@
       title: 标签名称
     -->
     <van-tabs v-model="activeChannelIndex">
+      <!-- 给标签页设置图标，用法是命名插槽
+          slot="nav-left/right" 图标放置的位置
+          class="channel-more"  下述设置css样式
+      -->
+      <div slot="nav-right" class="channel-more" @click="showChannel=true">
+        <!-- 图标  name="wap-nav" 3杠图标 -->
+        <van-icon name="wap-nav" />
+      </div>
       <!-- <van-tab title="标签名称">当前标签对应的内容</van-tab> -->
       <van-tab :title="item.name" v-for="item in channelList" :key="item.id">
         <com-article :channelID="item.id"></com-article>
       </van-tab>
     </van-tabs>
+    <!-- 频道操作 -->
+    <com-channel
+      v-model="showChannel"
+      :channelList="channelList"
+      :activeChannelIndex="activeChannelIndex"
+    ></com-channel>
   </div>
 </template>
 
 <script>
+
+// 导入组件模块
+import ComChannel from './components/com-channel'
 
 // 导入api函数
 import { apiChannelList } from '@/api/channel.js'
@@ -24,10 +41,13 @@ import ComArticle from './components/com-article'
 export default {
   name: 'home-index',
   components: {
+    ComChannel,
     ComArticle
   },
   data () {
     return {
+      showChannel: false, // 频道操作弹出层组件显示标志
+
       channelList: [],
       // 激活频道下标标志
       activeChannelIndex: 0
@@ -67,5 +87,19 @@ export default {
   /deep/ .van-tabs__line {
     background-color: #1989fa;
   }
+  /deep/ .van-tabs__wrap {
+    width: 90%; /*设置频道列表最大宽度，可以避免最后一个频道被按钮覆盖住*/
+  }
+}
+/*给 更多 频道设置样式*/
+.channel-more {
+  position: fixed;
+  right: 0;
+  background-color: white;
+  line-height: 88px;
+  height: 88px;
+  width: 90px;
+  text-align: center;
+  font-size: 40px;
 }
 </style>
