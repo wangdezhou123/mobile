@@ -21,7 +21,12 @@ title：单元格标题
 <template slot="label">通过作用域插槽体现单元格的“label描述信息”
 slot="label/title/"
         -->
-        <van-cell v-for="item in articleList" :key="item.art_id.toString()" :title="item.title">
+        <van-cell
+          v-for="item in articleList"
+          :key="item.art_id.toString()"
+          :title="item.title"
+          @click="$router.push({name:'article',params:{aid:item.art_id.toString()}})"
+        >
           <!--命名插槽：体现label的描述信息-->
           <template slot="label">
             <!-- grid宫格组件，一行中通过“列”的方式设置许多单元格
@@ -49,7 +54,7 @@ slot="label/title/"
               <van-icon
                 name="close"
                 style="float:right;"
-                @click="displayDialog(item.art_id.toString())"
+                @click.stop="displayDialog(item.art_id.toString())"
               />
 
               <span>作者:{{item.aut_name}}</span>
