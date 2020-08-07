@@ -15,7 +15,7 @@ import request from '@/utils/request.js'
  *
  * 经过如下设计，及时没有任何注释说明，我们也知道该接口需要哪些参数，太妙了
  */
-export function apiUserLogin({ mobile, code }) {
+export function apiUserLogin ({ mobile, code }) {
   // 请求axios，request就是axios的复制品，操作结构完全一致
   // return 返回执行结果，是promise对象
   return request({
@@ -35,7 +35,7 @@ export function apiUserLogin({ mobile, code }) {
  * 关注作者
  * @param {target} 被关注用户id
  */
-export function apiFollow(target) {
+export function apiFollow (target) {
   return request({
     method: 'post',
     url: '/app/v1_0/user/followings',
@@ -50,9 +50,21 @@ export function apiFollow(target) {
  * 取消关注作者
  * @param {target} 取消关注用户id
  */
-export function apiUnFollow(target) {
+export function apiUnFollow (target) {
   return request({
     method: 'delete',
     url: `/app/v1_0/user/followings/${target}`
+  })
+}
+
+/**
+ * api:获取用户自己信息
+ * 接口文档的目标id 不用传->忽略
+ * 接口：【获取用户自己信息】
+ */
+export const apiUserInfo = () => {
+  return request({
+    url: '/app/v1_0/user',
+    method: 'GET'
   })
 }
