@@ -19,24 +19,35 @@
         >{{article.is_followed?'取消关注':'+ 关注'}}</van-button>
       </div>
       <div class="content">
-        <p>{{article.content}}</p>
+        <p v-html="article.content"></p>
+        <!-- <p>{{article.content}}</p> -->
       </div>
       <div class="zan">
         <van-button
           round
           size="small"
-          class="active"
           plain
           icon="like-o"
           style="margin-right:8px;"
+          :class="{active:article.attitude===1}"
         >点赞</van-button>
-        <van-button round size="small" plain icon="delete">不喜欢</van-button>
+        <van-button
+          round
+          size="small"
+          plain
+          icon="delete"
+          :class="{active:article.attitude===0}"
+        >不喜欢</van-button>
       </div>
+      <!-- 评论列表 -->
+      <com-comment></com-comment>
     </div>
   </div>
 </template>
 
 <script>
+
+import ComComment from './components/com-comment'
 
 // 关注相关api方法导入
 import { apiFollow, apiUnFollow } from '@/api/user.js'
@@ -45,11 +56,14 @@ import { apiFollow, apiUnFollow } from '@/api/user.js'
 import { apiArticleDetail } from '@/api/article.js'
 export default {
   name: 'article-index',
-  data() {
+  data () {
     return {
       followLoading: false, // 关注活动加载标志
       article: {} // 目标文章详情信息
     }
+  },
+  components: {
+    ComComment
   },
   computed: {
     // 简化路由参数获取
@@ -57,13 +71,13 @@ export default {
       return this.$route.params.aid
     }
   },
-  created() {
+  created () {
     // 自动调用
     this.getArticleDetail()
   },
   methods: {
     // 关注作者、取消关注作者
-    async followMe() {
+    async followMe () {
       this.followLoading = true // 开启加载状态
 
       await this.$sleep(800)// 暂停0.8s
@@ -87,7 +101,7 @@ export default {
       this.followLoading = false // 恢复按钮状态
     },
     // 获得文章详情
-    async getArticleDetail() {
+    async getArticleDetail () {
       // 调用api获得文章详情
       const result = await apiArticleDetail(this.aid)
       this.article = result
